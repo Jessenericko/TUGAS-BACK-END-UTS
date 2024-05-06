@@ -2,6 +2,14 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
 const authenticationServices = require('./authentication-service');
 const Upayalogin = {}; // Inisialisasi objek kosong untuk menyimpan percobaan login dan data terkait
 
+/**
+ * Handle login request
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
+
 async function login(request, response, next) {
   const { email, password } = request.body;
   let UL = Upayalogin[email]?.attempts || 0; // Ambil jumlah percobaan login untuk alamat email tertentu atau atur ke 0 jika tidak ada
