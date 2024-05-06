@@ -1,5 +1,6 @@
 const usersService = require('./users-service');
 const { errorResponder, errorTypes } = require('../../../core/errors');
+const { sortBy } = require('lodash');
 
 /**
  * Handle get list of users request
@@ -8,10 +9,36 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
+
+//Soal no 1 tentang Paginationdan Filter
 async function getUsers(request, response, next) {
   try {
-    const users = await usersService.getUsers();
-    return response.status(200).json(users);
+    const Ukuranpage = isNaN(parseInt(request.query.page_size)) // mengambil ukuran page dari query string, jika tidak benar, nilainya adalah null
+      ? null
+      : parseInt(request.query.page_size);
+    const Nomorpage = parseInt(request.query.page_number) || 1; // nomor page di atur menjadi 1
+
+    const { count, users } = await usersService.getUsers({
+      sortBy: request.query.sort, //Sorting berdasarkan parameter 'sort'
+
+      Nomorpage, //nomor halaman
+      Ukuranpage, // ukuran halaman
+      searchBy: request.query.search, //Pencarian berdasarkan parameter 'search'
+    });
+
+    const jumlahpagenya = Math.ceil(count / Ukuranpage); //Menghitung jumlah halaman berdasarkan jumlah pengguna(count) dan ukuran halamannya
+
+    const Hasilnya = {
+      page_number: Nomorpage, //nomor halaman sekarang
+      page_size: Ukuranpage, // ukuran halaman
+      count: users.length, //jumlah user pada halaman yang ditampilkan
+      total_pages: jumlahpagenya, //jumlah semua halamanya
+      has_previous_page: Nomorpage > 1, //apakah memiliki halaman sebelumnya
+      has_next_page: Nomorpage < jumlahpagenya, //apakah memilliki halaman selanjutnya
+      data: users, //menampilkan data user pada halaman sekarang
+    };
+
+    return response.status(200).json(Hasilnya);
   } catch (error) {
     return next(error);
   }

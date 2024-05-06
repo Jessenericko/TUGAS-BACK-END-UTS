@@ -1,20 +1,20 @@
-const { User } = require('../../../models');
+const { mutasi } = require('../../../models');
 
 /**
- * Get a list of users
+ * Get a list of mutasis
  * @returns {Promise}
  * @param {object} qq
  */
-async function getUsers() {
+async function getmutasis() {
   return User.find({});
 }
 
 /**
- * Get user detail
+ * Get mutasis detail
  * @param {string} id - User ID
  * @returns {Promise}
  */
-async function getUser(id) {
+async function getmutasi(id) {
   return User.findById(id);
 }
 
@@ -61,75 +61,63 @@ async function getUsers({ Nomorpage, sortBy, Ukuranpage, searchBy }) {
 }
 
 /**
- * Create new user
- * @param {string} name - Name
- * @param {string} email - Email
- * @param {string} password - Hashed password
+ * Create new mutasi
+ * @param {string}type
+ * @param {string} Dari_acount
+ * @param {string}To_acount
+ * @param {string}amount
+ * @param {string}description
  * @returns {Promise}
  */
-async function createUser(name, email, password) {
+async function createmutasi(type, Dari_acount, To_acount, amount, description) {
   return User.create({
-    name,
-    email,
-    password,
+    type,
+    Dari_acount,
+    To_acount,
+    amount,
+    description,
   });
 }
 
 /**
- * Update existing user
- * @param {string} id - User ID
- * @param {string} name - Name
- * @param {string} email - Email
+ * Update existing mutasi
+ * @param {string}type
+ * @param {string} Dari_acount
+ * @param {string}To_acount
+ * @param {string}amount
+ * @param {string}description
  * @returns {Promise}
  */
-async function updateUser(id, name, email) {
+async function updatemutasi(type, Dari_acount, To_acount, amount, description) {
   return User.updateOne(
     {
       _id: id,
     },
     {
       $set: {
-        name,
-        email,
+        type,
+        Dari_acount,
+        To_acount,
+        amount,
+        description,
       },
     }
   );
 }
 
 /**
- * Delete a user
- * @param {string} id - User ID
+ * Delete a mutasi
+ * @param {string} id -mutasi ID
  * @returns {Promise}
  */
-async function deleteUser(id) {
-  return User.deleteOne({ _id: id });
-}
-
-/**
- * Get user by email to prevent duplicate email
- * @param {string} email - Email
- * @returns {Promise}
- */
-async function getUserByEmail(email) {
-  return User.findOne({ email });
-}
-
-/**
- * Update user password
- * @param {string} id - User ID
- * @param {string} password - New hashed password
- * @returns {Promise}
- */
-async function changePassword(id, password) {
-  return User.updateOne({ _id: id }, { $set: { password } });
+async function deletemutasi(id) {
+  return mutasi.deleteOne({ _id: id });
 }
 
 module.exports = {
-  getUsers,
-  getUser,
-  createUser,
-  updateUser,
-  deleteUser,
-  getUserByEmail,
-  changePassword,
+  getmutasis,
+  getmutasi,
+  createmutasi,
+  updatemutasi,
+  deletemutasi,
 };

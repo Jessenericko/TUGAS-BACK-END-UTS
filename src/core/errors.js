@@ -67,6 +67,11 @@ const errorTypes = {
     status: 403,
     code: 'INVALID_CREDENTIALS_ERROR',
   },
+  Terlalu_Banyak_Melakukan_Login: {
+    description: 'Anda terlalu banyak melakukan login',
+    status: 403,
+    code: 'Terlalu_Banyak_Melakukan_Login',
+  },
   INVALID_PASSWORD: {
     description: 'Invalid password',
     status: 403,
